@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外链发布工具 - 免费外链存放平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#f5f7fa;color:#333;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;margin-bottom:30px;padding:20px;background:#fff;border-radius:12px;box-shadow:0 2px 12px #eee}
+h1{color:#2266ee;margin-bottom:8px;font-size:24px}
+.desc{color:#666}
+.link-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 12px #eee}
+.item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;gap:10px;flex-wrap:wrap}
+.item:last-child{border:none}
+.left h3{font-size:16px;margin-bottom:4px}
+.left a{color:#2266ee;text-decoration:none;word-break:break-all;font-size:14px}
+.copy-btn{background:#2266ee;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer}
+.copy-btn:hover{background:#1855cc}
+.tips{margin-top:20px;text-align:center;color:#999;font-size:13px}
+.admin-entry{text-align:center;margin-top:20px}
+.admin-entry a{color:#2266ee}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>外链发布工具</h1>
+        <div class="desc">批量存放、一键复制各类网站外链</div>
+    </div>
+    <div class="link-box">
+<?php
+include 'config.php';
+$res = mysqli_query($conn,"select * from links where status=1 order by sort desc,id desc");
+while($row=mysqli_fetch_assoc($res)){
+?>
+        <div class="item">
+            <div class="left">
+                <h3><?php echo $row['title']; ?></h3>
+                <a href="<?php echo $row['url']; ?>" target="_blank"><?php echo $row['url']; ?></a>
+            </div>
+            <button class="copy-btn" onclick="copyLink('<?php echo $row['url']; ?>')">复制链接</button>
+        </div>
+<?php } ?>
+    </div>
+    <div class="tips">所有外链由管理员统一发布，如需新增请联系站长后台添加</div>
+    <div class="admin-entry">
+        <a href="admin/login.php">管理员登录</a>
+    </div>
+</div>
+<script>
+function copyLink(url){
+    let input = document.createElement('input');
+    input.value = url;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+    alert("链接复制成功！");
+}
+</script>
+</body>
+</html>
